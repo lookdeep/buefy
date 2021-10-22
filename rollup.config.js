@@ -72,8 +72,8 @@ export default () => {
                     node({
                         extensions: ['.vue', '.js']
                     }),
-                    cjs(),
                     vue(vuePluginConfig),
+                    cjs(),
                     babel(babelConfig)
                 ]
             }
