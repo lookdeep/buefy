@@ -67,8 +67,9 @@ export default {
             createElement(
                 Transition,
                 { name: this.animation },
-                [
-                    createElement(
+                {
+                    default: () => {
+                    return createElement(
                         'div',
                         {
                             class: 'collapse-content',
@@ -77,7 +78,8 @@ export default {
                         },
                         this.$slots
                     )
-                ]
+                   }
+                }
             ),
             [[vShow, this.isOpen]]
         )
