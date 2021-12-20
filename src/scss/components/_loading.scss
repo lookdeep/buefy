@@ -34,8 +34,8 @@ $loading-full-page-icon-size: 5em !default;
         &:after {
             @include loader;
             position: absolute;
-            top: calc(50% - #{$loading-icon-size / 2});
-            left: calc(50% - #{$loading-icon-size / 2});
+            top: calc(50% - #{calc($loading-icon-size / 2)});
+            left: calc(50% - #{calc($loading-icon-size / 2)});
             width: $loading-icon-size;
             height: $loading-icon-size;
             border-width: 0.25em;
