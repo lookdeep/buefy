@@ -17,8 +17,8 @@ $loading-full-page-icon-size: 5em !default;
         position: fixed;
         .loading-icon {
             &:after {
-                top: calc(50% - #{$loading-full-page-icon-size / 2});
-                left: calc(50% - #{$loading-full-page-icon-size / 2});
+                top: calc(50% - #{calc($loading-full-page-icon-size / 2)});
+                left: calc(50% - #{calc($loading-full-page-icon-size / 2)});
                 width: $loading-full-page-icon-size;
                 height: $loading-full-page-icon-size;
             }

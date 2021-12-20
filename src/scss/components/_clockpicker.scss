@@ -238,7 +238,7 @@
             }
 
             &-hand {
-                height: calc(50% - #{$hand-endpoint-size / 2});
+                height: calc(50% - #{calc($hand-endpoint-size / 2)});
                 width: 2px;
                 bottom: 50%;
                 left: calc(50% - 1px);
@@ -259,7 +259,7 @@
                     height: $hand-endpoint-size;
                     content: "";
                     position: absolute;
-                    top: -($hand-endpoint-size) / 2;
+                    top: calc(-($hand-endpoint-size) / 2);
                     left: 50%;
                     transform: translate(-50%, -50%);
                 }
