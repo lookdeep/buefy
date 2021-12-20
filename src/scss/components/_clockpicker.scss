@@ -1,3 +1,4 @@
+@use "sass:math";
 
 .b-clockpicker {
     // Clockpicker variables defined here as exact numbers
@@ -259,7 +260,7 @@
                     height: $hand-endpoint-size;
                     content: "";
                     position: absolute;
-                    top: calc(-($hand-endpoint-size) / 2);
+                    top: math.div(-($hand-endpoint-size), 2);
                     left: 50%;
                     transform: translate(-50%, -50%);
                 }
