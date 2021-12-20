@@ -48,7 +48,7 @@
     "build:lib": "rimraf dist && npm run build:js && npm run build:scss && npm run vetur",
     "build:lib:watch": "concurrently \"npm run build:js:watch\" \"npm run build:scss:watch \" ",
     "build:docs": "node build/build.js && copyfiles --flat netlify.toml dist-docs",
-    "build": "npm run build:lib && npm run build:docs",
+    "build": "npm run build:lib",
     "cov": "./node_modules/codcov/bin/codcov",
     "vetur": "node -r esm build/vetur.js"
   },
@@ -163,7 +163,7 @@
       "eslint --fix"
     ]
   },
-  "pre-commit": "lint:staged",
+//  "pre-commit": "lint:staged",
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
