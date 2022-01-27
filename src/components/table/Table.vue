@@ -822,8 +822,12 @@ export default {
         * When checkedRows prop change, update internal value without
         * mutating original data.
         */
-        checkedRows(rows) {
-            this.newCheckedRows = [...rows]
+        // Using deep watching because in vue3 array mutations doesn't trigger watchers
+        checkedRows: {
+            handler(rows) {
+                this.newCheckedRows = [...rows]
+            },
+            deep: true
         },
 
         /*
