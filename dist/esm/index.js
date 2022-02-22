@@ -106,7 +106,7 @@ import './MessageMixin-335a0a64.js';
 import './NoticeMixin-66c3d0b2.js';
 import './typeof-6c6d8d7a.js';
 import './Pagination-aa3b2cba.js';
-import './Tooltip-a7cfc6f7.js';
+import './Tooltip-de1ce9fa.js';
 import './TabbedChildMixin-bdf09624.js';
 import './SlotComponent-bdb2e93f.js';
 import './Tag-89b086b9.js';

@@ -68,7 +68,7 @@ require('./MessageMixin-9077cd6c.js');
 require('./NoticeMixin-67cbde57.js');
 require('./typeof-5baf6faf.js');
 require('./Pagination-f02c5b87.js');
-require('./Tooltip-9e182773.js');
+require('./Tooltip-d9618247.js');
 require('./TabbedChildMixin-84248bd5.js');
 require('./SlotComponent-f2e4fdc4.js');
 require('./Tag-b341e01a.js');

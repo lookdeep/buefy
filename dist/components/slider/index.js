@@ -153,6 +153,10 @@
             autoClose: {
                 type: [Array, Boolean],
                 default: true
+            },
+            keepOpenOnContentHover: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -160,6 +164,7 @@
                 isActive: false,
                 triggerStyle: {},
                 timer: null,
+                closeTimeout: null,
                 _bodyEl: undefined // Used to append to body
             }
         },
@@ -184,6 +189,17 @@
             }
         },
         methods: {
+            onContentHover() {
+                if (this.keepOpenOnContentHover) {
+                    this.clearCloseTimeout();
+                    this.onHover();
+                }
+            },
+            clearCloseTimeout() {
+                if (this.keepOpenOnContentHover) {
+                    clearTimeout(this.closeTimeout);
+                }
+            },
             updateAppendToBody() {
                 const tooltip = this.$refs.tooltip;
                 const trigger = this.$refs.trigger;
@@ -240,6 +256,7 @@
                 this.open();
             },
             open() {
+                this.clearCloseTimeout();
                 if (this.delay) {
                     this.timer = setTimeout(() => {
                         this.isActive = true;
@@ -250,9 +267,19 @@
                 }
             },
             close() {
-                if (typeof this.autoClose === 'boolean') {
+                const _close = () => {
                     this.isActive = !this.autoClose;
                     if (this.autoClose && this.timer) clearTimeout(this.timer);
+                };
+                if (typeof this.autoClose === 'boolean') {
+                    if (this.keepOpenOnContentHover) {
+                        clearTimeout(this.closeTimeout);
+                        this.closeTimeout = setTimeout(() => {
+                            _close();
+                        }, 150);
+                    } else {
+                        _close();
+                    }
                 }
             },
             /**
@@ -332,7 +359,9 @@
           default: vue.withCtx(() => [
             vue.withDirectives(vue.createVNode("div", {
               ref: "content",
-              class: ['tooltip-content', $props.contentClass]
+              class: ['tooltip-content', $props.contentClass],
+              onMouseenter: _cache[1] || (_cache[1] = (...args) => ($options.onContentHover && $options.onContentHover(...args))),
+              onMouseleave: _cache[2] || (_cache[2] = (...args) => ($options.close && $options.close(...args)))
             }, [
               ($props.label)
                 ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
@@ -341,7 +370,7 @@
                 : (_ctx.$slots.content)
                   ? vue.renderSlot(_ctx.$slots, "content", { key: 1 })
                   : vue.createCommentVNode("v-if", true)
-            ], 2 /* CLASS */), [
+            ], 34 /* CLASS, HYDRATE_EVENTS */), [
               [vue.vShow, $props.active && ($data.isActive || $props.always)]
             ])
           ]),
@@ -351,12 +380,12 @@
           ref: "trigger",
           class: "tooltip-trigger",
           style: $data.triggerStyle,
-          onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
-          onContextmenu: _cache[2] || (_cache[2] = (...args) => ($options.onContextMenu && $options.onContextMenu(...args))),
-          onMouseenter: _cache[3] || (_cache[3] = (...args) => ($options.onHover && $options.onHover(...args))),
-          onFocusCapture: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-          onBlurCapture: _cache[5] || (_cache[5] = (...args) => ($options.close && $options.close(...args))),
-          onMouseleave: _cache[6] || (_cache[6] = (...args) => ($options.close && $options.close(...args)))
+          onClick: _cache[3] || (_cache[3] = (...args) => ($options.onClick && $options.onClick(...args))),
+          onContextmenu: _cache[4] || (_cache[4] = (...args) => ($options.onContextMenu && $options.onContextMenu(...args))),
+          onMouseenter: _cache[5] || (_cache[5] = (...args) => ($options.onHover && $options.onHover(...args))),
+          onFocusCapture: _cache[6] || (_cache[6] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+          onBlurCapture: _cache[7] || (_cache[7] = (...args) => ($options.close && $options.close(...args))),
+          onMouseleave: _cache[8] || (_cache[8] = (...args) => ($options.close && $options.close(...args)))
         }, [
           vue.renderSlot(_ctx.$slots, "default", { ref: "slot" })
         ], 36 /* STYLE, HYDRATE_EVENTS */)

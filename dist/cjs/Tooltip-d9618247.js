@@ -1,6 +1,8 @@
-import { c as config } from './config-1ce4c54c.js';
-import { d as createAbsoluteElement, r as removeElement } from './helpers-2263d431.js';
-import { openBlock, createBlock, createVNode, Transition, withCtx, withDirectives, Fragment, createTextVNode, toDisplayString, renderSlot, createCommentVNode, vShow } from 'vue';
+'use strict';
+
+var config = require('./config-2c63be1d.js');
+var helpers = require('./helpers-0d6e2444.js');
+var vue = require('vue');
 
 var script = {
     name: 'BTooltip',
@@ -11,12 +13,12 @@ var script = {
         },
         type: {
             type: String,
-            default: () => config.defaultTooltipType
+            default: () => config.config.defaultTooltipType
         },
         label: String,
         delay: {
             type: Number,
-            default: () => config.defaultTooltipDelay
+            default: () => config.config.defaultTooltipDelay
         },
         position: {
             type: String,
@@ -55,6 +57,10 @@ var script = {
         autoClose: {
             type: [Array, Boolean],
             default: true
+        },
+        keepOpenOnContentHover: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -62,6 +68,7 @@ var script = {
             isActive: false,
             triggerStyle: {},
             timer: null,
+            closeTimeout: null,
             _bodyEl: undefined // Used to append to body
         }
     },
@@ -86,6 +93,17 @@ var script = {
         }
     },
     methods: {
+        onContentHover() {
+            if (this.keepOpenOnContentHover) {
+                this.clearCloseTimeout();
+                this.onHover();
+            }
+        },
+        clearCloseTimeout() {
+            if (this.keepOpenOnContentHover) {
+                clearTimeout(this.closeTimeout);
+            }
+        },
         updateAppendToBody() {
             const tooltip = this.$refs.tooltip;
             const trigger = this.$refs.trigger;
@@ -142,6 +160,7 @@ var script = {
             this.open();
         },
         open() {
+            this.clearCloseTimeout();
             if (this.delay) {
                 this.timer = setTimeout(() => {
                     this.isActive = true;
@@ -152,9 +171,19 @@ var script = {
             }
         },
         close() {
-            if (typeof this.autoClose === 'boolean') {
+            const _close = () => {
                 this.isActive = !this.autoClose;
                 if (this.autoClose && this.timer) clearTimeout(this.timer);
+            };
+            if (typeof this.autoClose === 'boolean') {
+                if (this.keepOpenOnContentHover) {
+                    clearTimeout(this.closeTimeout);
+                    this.closeTimeout = setTimeout(() => {
+                        _close();
+                    }, 150);
+                } else {
+                    _close();
+                }
             }
         },
         /**
@@ -204,7 +233,7 @@ var script = {
     },
     mounted() {
         if (this.appendToBody && typeof window !== 'undefined') {
-            this.$data._bodyEl = createAbsoluteElement(this.$refs.content);
+            this.$data._bodyEl = helpers.createAbsoluteElement(this.$refs.content);
             this.updateAppendToBody();
         }
     },
@@ -220,47 +249,49 @@ var script = {
             document.removeEventListener('keyup', this.keyPress);
         }
         if (this.appendToBody) {
-            removeElement(this.$data._bodyEl);
+            helpers.removeElement(this.$data._bodyEl);
         }
     }
 };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", {
+  return (vue.openBlock(), vue.createBlock("span", {
     ref: "tooltip",
     class: $options.rootClasses
   }, [
-    createVNode(Transition, { name: $options.newAnimation }, {
-      default: withCtx(() => [
-        withDirectives(createVNode("div", {
+    vue.createVNode(vue.Transition, { name: $options.newAnimation }, {
+      default: vue.withCtx(() => [
+        vue.withDirectives(vue.createVNode("div", {
           ref: "content",
-          class: ['tooltip-content', $props.contentClass]
+          class: ['tooltip-content', $props.contentClass],
+          onMouseenter: _cache[1] || (_cache[1] = (...args) => ($options.onContentHover && $options.onContentHover(...args))),
+          onMouseleave: _cache[2] || (_cache[2] = (...args) => ($options.close && $options.close(...args)))
         }, [
           ($props.label)
-            ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                createTextVNode(toDisplayString($props.label), 1 /* TEXT */)
+            ? (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 0 }, [
+                vue.createTextVNode(vue.toDisplayString($props.label), 1 /* TEXT */)
               ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
             : (_ctx.$slots.content)
-              ? renderSlot(_ctx.$slots, "content", { key: 1 })
-              : createCommentVNode("v-if", true)
-        ], 2 /* CLASS */), [
-          [vShow, $props.active && ($data.isActive || $props.always)]
+              ? vue.renderSlot(_ctx.$slots, "content", { key: 1 })
+              : vue.createCommentVNode("v-if", true)
+        ], 34 /* CLASS, HYDRATE_EVENTS */), [
+          [vue.vShow, $props.active && ($data.isActive || $props.always)]
         ])
       ]),
       _: 3 /* FORWARDED */
     }, 8 /* PROPS */, ["name"]),
-    createVNode("div", {
+    vue.createVNode("div", {
       ref: "trigger",
       class: "tooltip-trigger",
       style: $data.triggerStyle,
-      onClick: _cache[1] || (_cache[1] = (...args) => ($options.onClick && $options.onClick(...args))),
-      onContextmenu: _cache[2] || (_cache[2] = (...args) => ($options.onContextMenu && $options.onContextMenu(...args))),
-      onMouseenter: _cache[3] || (_cache[3] = (...args) => ($options.onHover && $options.onHover(...args))),
-      onFocusCapture: _cache[4] || (_cache[4] = (...args) => ($options.onFocus && $options.onFocus(...args))),
-      onBlurCapture: _cache[5] || (_cache[5] = (...args) => ($options.close && $options.close(...args))),
-      onMouseleave: _cache[6] || (_cache[6] = (...args) => ($options.close && $options.close(...args)))
+      onClick: _cache[3] || (_cache[3] = (...args) => ($options.onClick && $options.onClick(...args))),
+      onContextmenu: _cache[4] || (_cache[4] = (...args) => ($options.onContextMenu && $options.onContextMenu(...args))),
+      onMouseenter: _cache[5] || (_cache[5] = (...args) => ($options.onHover && $options.onHover(...args))),
+      onFocusCapture: _cache[6] || (_cache[6] = (...args) => ($options.onFocus && $options.onFocus(...args))),
+      onBlurCapture: _cache[7] || (_cache[7] = (...args) => ($options.close && $options.close(...args))),
+      onMouseleave: _cache[8] || (_cache[8] = (...args) => ($options.close && $options.close(...args)))
     }, [
-      renderSlot(_ctx.$slots, "default", { ref: "slot" })
+      vue.renderSlot(_ctx.$slots, "default", { ref: "slot" })
     ], 36 /* STYLE, HYDRATE_EVENTS */)
   ], 2 /* CLASS */))
 }
@@ -268,4 +299,4 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 script.render = render;
 script.__file = "src/components/tooltip/Tooltip.vue";
 
-export { script as s };
+exports.script = script;
