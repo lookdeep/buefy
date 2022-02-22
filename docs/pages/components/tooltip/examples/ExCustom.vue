@@ -1,6 +1,6 @@
 <template>
     <section class="b-tooltips">
-        <b-tooltip position="is-bottom" multilined>
+        <b-tooltip position="is-bottom" multilined :keep-open-on-content-hover="true">
             <b-button label="Html Content" type="is-primary" />
             <template v-slot:content>
                 <b>Lorem ipsum dolor sit amet</b>, consectetur warning elit. <i>Fusce id fermentum quam</i>.

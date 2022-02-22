@@ -5,6 +5,8 @@
                 v-show="active && (isActive || always)"
                 ref="content"
                 :class="['tooltip-content', contentClass]"
+                @mouseenter="onContentHover"
+                @mouseleave="close"
             >
                 <template v-if="label">{{ label }}</template>
                 <template v-else-if="$slots.content">
@@ -85,6 +87,10 @@ export default {
         autoClose: {
             type: [Array, Boolean],
             default: true
+        },
+        keepOpenOnContentHover: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -92,6 +98,7 @@ export default {
             isActive: false,
             triggerStyle: {},
             timer: null,
+            closeTimeout: null,
             _bodyEl: undefined // Used to append to body
         }
     },
@@ -116,6 +123,17 @@ export default {
         }
     },
     methods: {
+        onContentHover() {
+            if (this.keepOpenOnContentHover) {
+                this.clearCloseTimeout()
+                this.onHover()
+            }
+        },
+        clearCloseTimeout() {
+            if (this.keepOpenOnContentHover) {
+                clearTimeout(this.closeTimeout)
+            }
+        },
         updateAppendToBody() {
             const tooltip = this.$refs.tooltip
             const trigger = this.$refs.trigger
@@ -172,6 +190,7 @@ export default {
             this.open()
         },
         open() {
+            this.clearCloseTimeout()
             if (this.delay) {
                 this.timer = setTimeout(() => {
                     this.isActive = true
@@ -182,9 +201,19 @@ export default {
             }
         },
         close() {
-            if (typeof this.autoClose === 'boolean') {
+            const _close = () => {
                 this.isActive = !this.autoClose
                 if (this.autoClose && this.timer) clearTimeout(this.timer)
+            }
+            if (typeof this.autoClose === 'boolean') {
+                if (this.keepOpenOnContentHover) {
+                    clearTimeout(this.closeTimeout)
+                    this.closeTimeout = setTimeout(() => {
+                        _close()
+                    }, 150)
+                } else {
+                    _close()
+                }
             }
         },
         /**
