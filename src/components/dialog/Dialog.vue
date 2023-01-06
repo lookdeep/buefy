@@ -39,7 +39,10 @@
                                     <slot />
                                 </template>
                                 <template v-else>
-                                    <div v-html="message" />
+                                    <template v-if="unsafeHtmlMessage">
+                                        <div v-html="unsafeHtmlMessage" />
+                                    </template>
+                                    <div v-else>{{ message }}</div>
                                 </template>
                             </p>
 
@@ -104,6 +107,7 @@ export default {
     props: {
         title: String,
         message: [String, Array],
+        unsafeHtmlMessage: String,
         icon: String,
         iconPack: String,
         hasIcon: Boolean,
