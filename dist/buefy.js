@@ -8409,6 +8409,7 @@
       props: {
           title: String,
           message: [String, Array],
+          unsafeHtmlMessage: String,
           icon: String,
           iconPack: String,
           hasIcon: Boolean,
@@ -8589,13 +8590,14 @@
     class: "media-left"
   };
   const _hoisted_6$4 = { class: "media-content" };
-  const _hoisted_7$3 = {
+  const _hoisted_7$3 = { key: 1 };
+  const _hoisted_8$2 = {
     key: 0,
     class: "field"
   };
-  const _hoisted_8$2 = { class: "control" };
-  const _hoisted_9$1 = { class: "help is-danger" };
-  const _hoisted_10$1 = { class: "modal-card-foot" };
+  const _hoisted_9$1 = { class: "control" };
+  const _hoisted_10$1 = { class: "help is-danger" };
+  const _hoisted_11$1 = { class: "modal-card-foot" };
 
   function render$z(_ctx, _cache, $props, $setup, $data, $options) {
     const _component_b_icon = vue.resolveComponent("b-icon");
@@ -8639,14 +8641,18 @@
                       vue.createVNode("p", null, [
                         (_ctx.$slots.default)
                           ? vue.renderSlot(_ctx.$slots, "default", { key: 0 })
-                          : (vue.openBlock(), vue.createBlock("div", {
-                              key: 1,
-                              innerHTML: $props.message
-                            }, null, 8 /* PROPS */, ["innerHTML"]))
+                          : (vue.openBlock(), vue.createBlock(vue.Fragment, { key: 1 }, [
+                              ($props.unsafeHtmlMessage)
+                                ? (vue.openBlock(), vue.createBlock("div", {
+                                    key: 0,
+                                    innerHTML: $props.unsafeHtmlMessage
+                                  }, null, 8 /* PROPS */, ["innerHTML"]))
+                                : (vue.openBlock(), vue.createBlock("div", _hoisted_7$3, vue.toDisplayString($props.message), 1 /* TEXT */))
+                            ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
                       ]),
                       ($props.hasInput)
-                        ? (vue.openBlock(), vue.createBlock("div", _hoisted_7$3, [
-                            vue.createVNode("div", _hoisted_8$2, [
+                        ? (vue.openBlock(), vue.createBlock("div", _hoisted_8$2, [
+                            vue.createVNode("div", _hoisted_9$1, [
                               vue.withDirectives(vue.createVNode("input", vue.mergeProps({
                                 "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ($data.prompt = $event)),
                                 class: ["input", { 'is-danger': $data.validationMessage }],
@@ -8657,13 +8663,13 @@
                                 [vue.vModelDynamic, $data.prompt]
                               ])
                             ]),
-                            vue.createVNode("p", _hoisted_9$1, vue.toDisplayString($data.validationMessage), 1 /* TEXT */)
+                            vue.createVNode("p", _hoisted_10$1, vue.toDisplayString($data.validationMessage), 1 /* TEXT */)
                           ]))
                         : vue.createCommentVNode("v-if", true)
                     ])
                   ])
                 ], 2 /* CLASS */),
-                vue.createVNode("footer", _hoisted_10$1, [
+                vue.createVNode("footer", _hoisted_11$1, [
                   ($options.showCancel)
                     ? (vue.openBlock(), vue.createBlock("button", {
                         key: 0,

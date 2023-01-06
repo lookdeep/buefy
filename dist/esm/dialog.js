@@ -1,5 +1,5 @@
 import { r as removeElement, m as merge, x as getComponentFromVNode, _ as _defineProperty } from './helpers-2263d431.js';
-import { resolveComponent, resolveDirective, openBlock, createBlock, Transition, withCtx, withDirectives, createVNode, toDisplayString, createCommentVNode, renderSlot, mergeProps, withKeys, vModelDynamic, createApp, h } from 'vue';
+import { resolveComponent, resolveDirective, openBlock, createBlock, Transition, withCtx, withDirectives, createVNode, toDisplayString, createCommentVNode, renderSlot, Fragment, mergeProps, withKeys, vModelDynamic, createApp, h } from 'vue';
 import { t as trapFocus } from './trapFocus-d876d41a.js';
 import { s as script$1 } from './Icon-fefef9ed.js';
 import { s as script$2 } from './Modal-5ebd467f.js';
@@ -19,6 +19,7 @@ var script = {
     props: {
         title: String,
         message: [String, Array],
+        unsafeHtmlMessage: String,
         icon: String,
         iconPack: String,
         hasIcon: Boolean,
@@ -199,13 +200,14 @@ const _hoisted_5 = {
   class: "media-left"
 };
 const _hoisted_6 = { class: "media-content" };
-const _hoisted_7 = {
+const _hoisted_7 = { key: 1 };
+const _hoisted_8 = {
   key: 0,
   class: "field"
 };
-const _hoisted_8 = { class: "control" };
-const _hoisted_9 = { class: "help is-danger" };
-const _hoisted_10 = { class: "modal-card-foot" };
+const _hoisted_9 = { class: "control" };
+const _hoisted_10 = { class: "help is-danger" };
+const _hoisted_11 = { class: "modal-card-foot" };
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_b_icon = resolveComponent("b-icon");
@@ -249,14 +251,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     createVNode("p", null, [
                       (_ctx.$slots.default)
                         ? renderSlot(_ctx.$slots, "default", { key: 0 })
-                        : (openBlock(), createBlock("div", {
-                            key: 1,
-                            innerHTML: $props.message
-                          }, null, 8 /* PROPS */, ["innerHTML"]))
+                        : (openBlock(), createBlock(Fragment, { key: 1 }, [
+                            ($props.unsafeHtmlMessage)
+                              ? (openBlock(), createBlock("div", {
+                                  key: 0,
+                                  innerHTML: $props.unsafeHtmlMessage
+                                }, null, 8 /* PROPS */, ["innerHTML"]))
+                              : (openBlock(), createBlock("div", _hoisted_7, toDisplayString($props.message), 1 /* TEXT */))
+                          ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
                     ]),
                     ($props.hasInput)
-                      ? (openBlock(), createBlock("div", _hoisted_7, [
-                          createVNode("div", _hoisted_8, [
+                      ? (openBlock(), createBlock("div", _hoisted_8, [
+                          createVNode("div", _hoisted_9, [
                             withDirectives(createVNode("input", mergeProps({
                               "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => ($data.prompt = $event)),
                               class: ["input", { 'is-danger': $data.validationMessage }],
@@ -267,13 +273,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                               [vModelDynamic, $data.prompt]
                             ])
                           ]),
-                          createVNode("p", _hoisted_9, toDisplayString($data.validationMessage), 1 /* TEXT */)
+                          createVNode("p", _hoisted_10, toDisplayString($data.validationMessage), 1 /* TEXT */)
                         ]))
                       : createCommentVNode("v-if", true)
                   ])
                 ])
               ], 2 /* CLASS */),
-              createVNode("footer", _hoisted_10, [
+              createVNode("footer", _hoisted_11, [
                 ($options.showCancel)
                   ? (openBlock(), createBlock("button", {
                       key: 0,
